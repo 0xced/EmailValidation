@@ -1,4 +1,4 @@
-﻿//
+//
 // EmailValidator.cs
 //
 // Author: Jeffrey Stedfast <jestedfa@microsoft.com>
@@ -24,6 +24,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Linq;
 
 namespace EmailValidation
 {
@@ -53,6 +54,9 @@ namespace EmailValidation
 			int count;
 
 			if (allowInternational) {
+#if !NETFRAMEWORK && !NETSTANDARD
+				count = text[startIndex..endIndex].EnumerateRunes ().Count ();
+#else
 				int index = startIndex;
 
 				count = 0;
@@ -63,6 +67,7 @@ namespace EmailValidation
 					index++;
 					count++;
 				}
+#endif
 			} else {
 				count = endIndex - startIndex;
 			}
